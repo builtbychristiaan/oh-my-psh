@@ -15,13 +15,13 @@ function Expand-ProjectPath {
 function Get-ProjectPath {
     param([Parameter(Mandatory)][string]$ProjectName)
 
-    return $script:Projects[$ProjectName].Path
+    return $global:Projects[$ProjectName].Path
 }
 
 function Get-ProjectNodeVersion {
     param([Parameter(Mandatory)][string]$ProjectName)
 
-    $project = $script:Projects[$ProjectName]
+    $project = $global:Projects[$ProjectName]
     if ($project.NodeVersion) {
         return $project.NodeVersion
     }
@@ -32,7 +32,7 @@ function Get-ProjectNodeVersion {
 function Get-ProjectRunCommands {
     param([Parameter(Mandatory)][string]$ProjectName)
 
-    $commands = $script:Projects[$ProjectName].RunCommands
+    $commands = $global:Projects[$ProjectName].RunCommands
     if ($null -eq $commands) {
         return @()
     }
@@ -47,6 +47,6 @@ function Get-ProjectRunCommands {
 function Test-ProjectAlias {
     param([Parameter(Mandatory)][string]$ProjectAlias)
 
-    return $script:Projects.ContainsKey($ProjectAlias) -and
-        $null -ne $script:Projects[$ProjectAlias].Path
+    return $global:Projects.ContainsKey($ProjectAlias) -and
+        $null -ne $global:Projects[$ProjectAlias].Path
 }

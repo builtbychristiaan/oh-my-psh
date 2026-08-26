@@ -1,6 +1,10 @@
 function run {
     param(
         [Parameter(Mandatory)]
+        [ArgumentCompleter({
+            param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+            $global:Projects.Keys | Where-Object { $_ -like "$wordToComplete*" } | Sort-Object
+        })]
         [string]$ProjectName
     )
 

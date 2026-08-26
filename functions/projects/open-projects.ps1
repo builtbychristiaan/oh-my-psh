@@ -1,19 +1,23 @@
 function go {
-    if ($args.Count -eq 0) {
-        Write-Host 'Error: Please provide at least one project name' -ForegroundColor Red
-        return
-    }
+    param(
+        [Parameter(Mandatory, ValueFromRemainingArguments)]
+        [ArgumentCompleter({
+            param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+            $global:Projects.Keys | Where-Object { $_ -like "$wordToComplete*" } | Sort-Object
+        })]
+        [string[]]$ProjectAliases
+    )
 
-    foreach ($projectAlias in $args) {
+    foreach ($projectAlias in $ProjectAliases) {
         if (-not (Test-ProjectAlias $projectAlias)) {
             Write-Host "Error: Invalid project alias '$projectAlias'" -ForegroundColor Red
             return
         }
     }
 
-    foreach ($projectAlias in $args) {
+    foreach ($projectAlias in $ProjectAliases) {
         $projectPath = Expand-ProjectPath (Get-ProjectPath $projectAlias)
-        cursor $projectPath
+        code $projectPath
         Write-Host "Opened $projectAlias" -ForegroundColor Blue
     }
 }
